@@ -3,7 +3,7 @@ import Export from './Export'
 import Filter from './Filter'
 import Search from './Search'
 
-export default function TableActions({search,onSearchChange, onSearch, onStatusChange, status}) {
+export default function TableActions({search,onSearchChange, onSearch, onStatusChange, status, onExport}) {
   return (
     <div className='filter-container'>
       <div>
@@ -11,7 +11,7 @@ export default function TableActions({search,onSearchChange, onSearch, onStatusC
       </div>
       <div>
         <Filter onChange={onStatusChange} value={status}/>
-        <Export/>
+        <Export onExport={onExport}/>
       </div>
     </div>
   )

@@ -1,4 +1,5 @@
 import { transactions } from "../resources/data/transactionData"
+import {cloneDeep} from 'lodash'
 export default function handler(req, res) {
     const {search, status, page, size} = req.query
     let statusArray = ['authorized','initiated','successful','returned','canceled']
@@ -22,11 +23,18 @@ export default function handler(req, res) {
     const transactionData = filterTransaction(searchString.toLowerCase(), statusArray) 
     const paginatedTransaction = paginateTransaction(transactionData, pageNum, pageSize)
 
-    res.status(200).json({transactions:paginatedTransaction,count:transactionData.length})
+
+    const newTxn = paginatedTransaction.map(txn=>{
+      txn.grossAmount = `$${txn.grossAmount/100}`
+      
+      return txn;
+    })
+
+    res.status(200).json({transactions:newTxn,count:transactionData.length})
   }
 
-  function filterTransaction(search, status){
-    return transactions.filter(transaction=>(transaction.user.toLowerCase().includes(search) && status.includes(transaction.status.toLowerCase())))
+  export function filterTransaction(search, status){
+    return cloneDeep(transactions).filter(transaction=>(transaction.user.toLowerCase().includes(search) && status.includes(transaction.status.toLowerCase())))
   }
   
   function paginateTransaction(txns, pageNum, size=15){

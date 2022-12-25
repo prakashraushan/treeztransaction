@@ -13,14 +13,18 @@ function TransactionDashboard(){
     const [status, setStatus] = useState([])
     const [page,setPage] = useState(0)
     const [count,setCount] = useState(0)
-    const [size,setSize] = useState(15)
+    const size = 15
+    const [isRendered,setIsRendered]=useState(false)
 
     useEffect(() => {
         getTransactions()
+        setIsRendered(true)
       }, []);
 
     useEffect(()=>{
-        getTransactions(search,status.join(","), page, size)
+        if(isRendered){
+          getTransactions(search,status.join(","), page, size)
+        }
     },[page])
 
       async function getTransactions(txnSearch="", txnStatus="", txnPage=0, txnSize=15){
@@ -52,6 +56,22 @@ function TransactionDashboard(){
         setPage(prevPage=>prevPage+1)
       }
 
+      function exportTransaction(){
+        fetch(`/api/transactions/export?search=${search}&status=${status.join(",")}`)
+        .then(response => response.blob())
+        .then(blob => {
+          var url = window.URL.createObjectURL(blob);
+          var a = document.createElement('a');
+          a.href = url;
+          a.download = "transactions.xlsx";
+          document.body.appendChild(a); 
+          a.click();    
+          a.remove();  
+       });
+        
+      }
+
+
       return (
         <Layout>
             <Heading>Transactions</Heading>
@@ -62,6 +82,7 @@ function TransactionDashboard(){
             onSearch={handleSearch} 
             onStatusChange={handleStatusChange}
             status = {status}
+            onExport ={exportTransaction}
 
             />
             <TransactionTable transactions={transactions}/>
