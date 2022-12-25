@@ -1,0 +1,31 @@
+.layout{
+    max-width: 1000px;
+    padding: 20px 40px;
+    margin: 0 auto;
+}
+.heading{
+    font-size: 26px;
+    margin-bottom: 10px;
+    line-height: 1;
+}
+.sub-heading{
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 1;
+}
+.filter-container{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    margin: 80px 0px 20px 0px;
+}
+
+.pagination-container{
+    margin: 0 15px ;
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+
+}
